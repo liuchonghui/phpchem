@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9×19网格版化学元素周期表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8f8f8;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* 核心：9行19列固定网格 */
+        .periodic-grid {
+            display: grid;
+            grid-template-columns: repeat(19, 60px); /* 19列：周期列+18个族列 */
+            grid-template-rows: repeat(9, 70px);     /* 9行：表头+7周期+镧锕系占位行 */
+            gap: 1px; /* 网格线效果 */
+            background: #ccc;
+            margin-bottom: 20px;
+        }
+
+        /* 网格单元格通用样式 */
+        .grid-cell {
+            background: #fff;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        /* 表头单元格 */
+        .header-cell {
+            background: #333;
+            color: white;
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        /* 周期列单元格（第一列） */
+        .period-cell {
+            background: #444;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* 元素单元格 */
+        .element-cell {
+            background: #f0f8ff;
+        }
+
+        /* 镧系/锕系占位单元格 */
+        .placeholder-cell {
+            background: #e0e0e0;
+            color: #666;
+            font-size: 10px;
+        }
+
+        /* 空单元格 */
+        .empty-cell {
+            background: #f5f5f5;
+        }
+
+        /* 元素信息样式 */
+        .atomic-num {
+            font-size: 9px;
+            color: #666;
+            align-self: flex-start;
+        }
+
+        .symbol {
+            font-size: 16px;
+            font-weight: bold;
+            color: #222;
+            margin: 2px 0;
+        }
+
+        .name {
+            font-size: 9px;
+            color: #444;
+        }
+
+        /* 镧系锕系单独展示（1×16网格） */
+        .lan-act-grid {
+            display: grid;
+            grid-template-columns: 60px repeat(15, 60px); /* 标题列+15个元素列 */
+            grid-template-rows: 70px;
+            gap: 1px;
+            background: #ccc;
+            margin: 10px 0;
+            width: calc(19*60px + 18*1px); /* 和主网格等宽 */
+        }
+
+        .lan-act-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>9×19网格版化学元素周期表</h1>
+
+    <!-- 核心9×19网格：行0=表头，行1-7=周期1-7，行8=预留空行 -->
+    <div class="periodic-grid">
+        <!-- 行0：表头（列0=空，列1-18=族名） -->
+        <div class="grid-cell header-cell empty-cell"></div>      <!-- 列0：空 -->
+        <div class="grid-cell header-cell">ⅠA</div>              <!-- 列1：ⅠA -->
+        <div class="grid-cell header-cell">ⅡA</div>              <!-- 列2：ⅡA -->
+        <div class="grid-cell header-cell">ⅢB</div>              <!-- 列3：ⅢB -->
+        <div class="grid-cell header-cell">ⅣB</div>              <!-- 列4：ⅣB -->
+        <div class="grid-cell header-cell">ⅤB</div>              <!-- 列5：ⅤB -->
+        <div class="grid-cell header-cell">ⅥB</div>              <!-- 列6：ⅥB -->
+        <div class="grid-cell header-cell">ⅦB</div>              <!-- 列7：ⅦB -->
+        <div class="grid-cell header-cell">ⅧBⅠ</div>             <!-- 列8：ⅧBⅠ -->
+        <div class="grid-cell header-cell">ⅧBⅡ</div>             <!-- 列9：ⅧBⅡ -->
+        <div class="grid-cell header-cell">ⅧBⅢ</div>             <!-- 列10：ⅧBⅢ -->
+        <div class="grid-cell header-cell">ⅠB</div>              <!-- 列11：ⅠB -->
+        <div class="grid-cell header-cell">ⅡB</div>              <!-- 列12：ⅡB -->
+        <div class="grid-cell header-cell">ⅢA</div>              <!-- 列13：ⅢA -->
+        <div class="grid-cell header-cell">ⅣA</div>              <!-- 列14：ⅣA -->
+        <div class="grid-cell header-cell">ⅤA</div>              <!-- 列15：ⅤA -->
+        <div class="grid-cell header-cell">ⅥA</div>              <!-- 列16：ⅥA -->
+        <div class="grid-cell header-cell">ⅦA</div>              <!-- 列17：ⅦA -->
+        <div class="grid-cell header-cell">0族</div>             <!-- 列18：0族 -->
+
+        <!-- 行1：周期1（列0=1，列1=H，列18=He，其余空） -->
+        <div class="grid-cell period-cell">1</div>               <!-- 列0：周期1 -->
+        <div class="grid-cell element-cell">                    <!-- 列1：H -->
+            <span class="atomic-num">1</span>
+            <span class="symbol">H</span>
+            <span class="name">氢</span>
+        </div>
+        <div class="grid-cell empty-cell"></div>                 <!-- 列2：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列3：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列4：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列5：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列6：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列7：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列8：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列9：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列10：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列11：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列12：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列13：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列14：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列15：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列16：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列17：空 -->
+        <div class="grid-cell element-cell">                    <!-- 列18：He -->
+            <span class="atomic-num">2</span>
+            <span class="symbol">He</span>
+            <span class="name">氦</span>
+        </div>
+
+        <!-- 行2：周期2（列0=2，列1=Li，列2=Be，列13=B，列14=C，列15=N，列16=O，列17=F，列18=Ne，其余空） -->
+        <div class="grid-cell period-cell">2</div>               <!-- 列0：周期2 -->
+        <div class="grid-cell element-cell">                    <!-- 列1：Li -->
+            <span class="atomic-num">3</span>
+            <span class="symbol">Li</span>
+            <span class="name">锂</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列2：Be -->
+            <span class="atomic-num">4</span>
+            <span class="symbol">Be</span>
+            <span class="name">铍</span>
+        </div>
+        <div class="grid-cell empty-cell"></div>                 <!-- 列3：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列4：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列5：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列6：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列7：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列8：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列9：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列10：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列11：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列12：空 -->
+        <div class="grid-cell element-cell">                    <!-- 列13：B -->
+            <span class="atomic-num">5</span>
+            <span class="symbol">B</span>
+            <span class="name">硼</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列14：C -->
+            <span class="atomic-num">6</span>
+            <span class="symbol">C</span>
+            <span class="name">碳</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列15：N -->
+            <span class="atomic-num">7</span>
+            <span class="symbol">N</span>
+            <span class="name">氮</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列16：O -->
+            <span class="atomic-num">8</span>
+            <span class="symbol">O</span>
+            <span class="name">氧</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列17：F -->
+            <span class="atomic-num">9</span>
+            <span class="symbol">F</span>
+            <span class="name">氟</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列18：Ne -->
+            <span class="atomic-num">10</span>
+            <span class="symbol">Ne</span>
+            <span class="name">氖</span>
+        </div>
+
+        <!-- 行3：周期3（列0=3，列1=Na，列2=Mg，列13=Al，列14=Si，列15=P，列16=S，列17=Cl，列18=Ar，其余空） -->
+        <div class="grid-cell period-cell">3</div>               <!-- 列0：周期3 -->
+        <div class="grid-cell element-cell">                    <!-- 列1：Na -->
+            <span class="atomic-num">11</span>
+            <span class="symbol">Na</span>
+            <span class="name">钠</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列2：Mg -->
+            <span class="atomic-num">12</span>
+            <span class="symbol">Mg</span>
+            <span class="name">镁</span>
+        </div>
+        <div class="grid-cell empty-cell"></div>                 <!-- 列3：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列4：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列5：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列6：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列7：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列8：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列9：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列10：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列11：空 -->
+        <div class="grid-cell empty-cell"></div>                 <!-- 列12：空 -->
+        <div class="grid-cell element-cell">                    <!-- 列13：Al -->
+            <span class="atomic-num">13</span>
+            <span class="symbol">Al</span>
+            <span class="name">铝</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列14：Si -->
+            <span class="atomic-num">14</span>
+            <span class="symbol">Si</span>
+            <span class="name">硅</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列15：P -->
+            <span class="atomic-num">15</span>
+            <span class="symbol">P</span>
+            <span class="name">磷</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列16：S -->
+            <span class="atomic-num">16</span>
+            <span class="symbol">S</span>
+            <span class="name">硫</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列17：Cl -->
+            <span class="atomic-num">17</span>
+            <span class="symbol">Cl</span>
+            <span class="name">氯</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列18：Ar -->
+            <span class="atomic-num">18</span>
+            <span class="symbol">Ar</span>
+            <span class="name">氩</span>
+        </div>
+
+        <!-- 行4：周期4（列0=4，列1=K，列2=Ca，列3=Sc，列4=Ti，列5=V，列6=Cr，列7=Mn，列8=Fe，列9=Co，列10=Ni，列11=Cu，列12=Zn，列13=Ga，列14=Ge，列15=As，列16=Se，列17=Br，列18=Kr） -->
+        <div class="grid-cell period-cell">4</div>               <!-- 列0：周期4 -->
+        <div class="grid-cell element-cell">                    <!-- 列1：K -->
+            <span class="atomic-num">19</span>
+            <span class="symbol">K</span>
+            <span class="name">钾</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列2：Ca -->
+            <span class="atomic-num">20</span>
+            <span class="symbol">Ca</span>
+            <span class="name">钙</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列3：Sc -->
+            <span class="atomic-num">21</span>
+            <span class="symbol">Sc</span>
+            <span class="name">钪</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列4：Ti -->
+            <span class="atomic-num">22</span>
+            <span class="symbol">Ti</span>
+            <span class="name">钛</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列5：V -->
+            <span class="atomic-num">23</span>
+            <span class="symbol">V</span>
+            <span class="name">钒</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列6：Cr -->
+            <span class="atomic-num">24</span>
+            <span class="symbol">Cr</span>
+            <span class="name">铬</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列7：Mn -->
+            <span class="atomic-num">25</span>
+            <span class="symbol">Mn</span>
+            <span class="name">锰</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列8：Fe -->
+            <span class="atomic-num">26</span>
+            <span class="symbol">Fe</span>
+            <span class="name">铁</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列9：Co -->
+            <span class="atomic-num">27</span>
+            <span class="symbol">Co</span>
+            <span class="name">钴</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列10：Ni -->
+            <span class="atomic-num">28</span>
+            <span class="symbol">Ni</span>
+            <span class="name">镍</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列11：Cu -->
+            <span class="atomic-num">29</span>
+            <span class="symbol">Cu</span>
+            <span class="name">铜</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列12：Zn -->
+            <span class="atomic-num">30</span>
+            <span class="symbol">Zn</span>
+            <span class="name">锌</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列13：Ga -->
+            <span class="atomic-num">31</span>
+            <span class="symbol">Ga</span>
+            <span class="name">镓</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列14：Ge -->
+            <span class="atomic-num">32</span>
+            <span class="symbol">Ge</span>
+            <span class="name">锗</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列15：As -->
+            <span class="atomic-num">33</span>
+            <span class="symbol">As</span>
+            <span class="name">砷</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列16：Se -->
+            <span class="atomic-num">34</span>
+            <span class="symbol">Se</span>
+            <span class="name">硒</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列17：Br -->
+            <span class="atomic-num">35</span>
+            <span class="symbol">Br</span>
+            <span class="name">溴</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列18：Kr -->
+            <span class="atomic-num">36</span>
+            <span class="symbol">Kr</span>
+            <span class="name">氪</span>
+        </div>
+
+        <!-- 行5：周期5（列0=5，列1=Rb，列2=Sr，列3=Y，列4=Zr，列5=Nb，列6=Mo，列7=Tc，列8=Ru，列9=Rh，列10=Pd，列11=Ag，列12=Cd，列13=In，列14=Sn，列15=Sb，列16=Te，列17=I，列18=Xe） -->
+        <div class="grid-cell period-cell">5</div>               <!-- 列0：周期5 -->
+        <div class="grid-cell element-cell">                    <!-- 列1：Rb -->
+            <span class="atomic-num">37</span>
+            <span class="symbol">Rb</span>
+            <span class="name">铷</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列2：Sr -->
+            <span class="atomic-num">38</span>
+            <span class="symbol">Sr</span>
+            <span class="name">锶</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列3：Y -->
+            <span class="atomic-num">39</span>
+            <span class="symbol">Y</span>
+            <span class="name">钇</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列4：Zr -->
+            <span class="atomic-num">40</span>
+            <span class="symbol">Zr</span>
+            <span class="name">锆</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列5：Nb -->
+            <span class="atomic-num">41</span>
+            <span class="symbol">Nb</span>
+            <span class="name">铌</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列6：Mo -->
+            <span class="atomic-num">42</span>
+            <span class="symbol">Mo</span>
+            <span class="name">钼</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列7：Tc -->
+            <span class="atomic-num">43</span>
+            <span class="symbol">Tc</span>
+            <span class="name">锝</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列8：Ru -->
+            <span class="atomic-num">44</span>
+            <span class="symbol">Ru</span>
+            <span class="name">钌</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列9：Rh -->
+            <span class="atomic-num">45</span>
+            <span class="symbol">Rh</span>
+            <span class="name">铑</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列10：Pd -->
+            <span class="atomic-num">46</span>
+            <span class="symbol">Pd</span>
+            <span class="name">钯</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列11：Ag -->
+            <span class="atomic-num">47</span>
+            <span class="symbol">Ag</span>
+            <span class="name">银</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列12：Cd -->
+            <span class="atomic-num">48</span>
+            <span class="symbol">Cd</span>
+            <span class="name">镉</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列13：In -->
+            <span class="atomic-num">49</span>
+            <span class="symbol">In</span>
+            <span class="name">铟</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列14：Sn -->
+            <span class="atomic-num">50</span>
+            <span class="symbol">Sn</span>
+            <span class="name">锡</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列15：Sb -->
+            <span class="atomic-num">51</span>
+            <span class="symbol">Sb</span>
+            <span class="name">锑</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列16：Te -->
+            <span class="atomic-num">52</span>
+            <span class="symbol">Te</span>
+            <span class="name">碲</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列17：I -->
+            <span class="atomic-num">53</span>
+            <span class="symbol">I</span>
+            <span class="name">碘</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列18：Xe -->
+            <span class="atomic-num">54</span>
+            <span class="symbol">Xe</span>
+            <span class="name">氙</span>
+        </div>
+
+        <!-- 行6：周期6（列0=6，列1=Cs，列2=Ba，列3=镧系占位，列4=Hf，列5=Ta，列6=W，列7=Re，列8=Os，列9=Ir，列10=Pt，列11=Au，列12=Hg，列13=Tl，列14=Pb，列15=Bi，列16=Po，列17=At，列18=Rn） -->
+        <div class="grid-cell period-cell">6</div>               <!-- 列0：周期6 -->
+        <div class="grid-cell element-cell">                    <!-- 列1：Cs -->
+            <span class="atomic-num">55</span>
+            <span class="symbol">Cs</span>
+            <span class="name">铯</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列2：Ba -->
+            <span class="atomic-num">56</span>
+            <span class="symbol">Ba</span>
+            <span class="name">钡</span>
+        </div>
+        <div class="grid-cell placeholder-cell">                <!-- 列3：镧系占位 -->
+            <span>57-71</span>
+            <span>镧系</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列4：Hf -->
+            <span class="atomic-num">72</span>
+            <span class="symbol">Hf</span>
+            <span class="name">铪</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列5：Ta -->
+            <span class="atomic-num">73</span>
+            <span class="symbol">Ta</span>
+            <span class="name">钽</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列6：W -->
+            <span class="atomic-num">74</span>
+            <span class="symbol">W</span>
+            <span class="name">钨</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列7：Re -->
+            <span class="atomic-num">75</span>
+            <span class="symbol">Re</span>
+            <span class="name">铼</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列8：Os -->
+            <span class="atomic-num">76</span>
+            <span class="symbol">Os</span>
+            <span class="name">锇</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列9：Ir -->
+            <span class="atomic-num">77</span>
+            <span class="symbol">Ir</span>
+            <span class="name">铱</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列10：Pt -->
+            <span class="atomic-num">78</span>
+            <span class="symbol">Pt</span>
+            <span class="name">铂</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列11：Au -->
+            <span class="atomic-num">79</span>
+            <span class="symbol">Au</span>
+            <span class="name">金</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列12：Hg -->
+            <span class="atomic-num">80</span>
+            <span class="symbol">Hg</span>
+            <span class="name">汞</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列13：Tl -->
+            <span class="atomic-num">81</span>
+            <span class="symbol">Tl</span>
+            <span class="name">铊</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列14：Pb -->
+            <span class="atomic-num">82</span>
+            <span class="symbol">Pb</span>
+            <span class="name">铅</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列15：Bi -->
+            <span class="atomic-num">83</span>
+            <span class="symbol">Bi</span>
+            <span class="name">铋</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列16：Po -->
+            <span class="atomic-num">84</span>
+            <span class="symbol">Po</span>
+            <span class="name">钋</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列17：At -->
+            <span class="atomic-num">85</span>
+            <span class="symbol">At</span>
+            <span class="name">砹</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列18：Rn -->
+            <span class="atomic-num">86</span>
+            <span class="symbol">Rn</span>
+            <span class="name">氡</span>
+        </div>
+
+        <!-- 行7：周期7（列0=7，列1=Fr，列2=Ra，列3=锕系占位，列4=Rf，列5=Db，列6=Sg，列7=Bh，列8=Hs，列9=Mt，列10=Ds，列11=Rg，列12=Cn，列13=Nh，列14=Fl，列15=Mc，列16=Lv，列17=Ts，列18=Og） -->
+        <div class="grid-cell period-cell">7</div>               <!-- 列0：周期7 -->
+        <div class="grid-cell element-cell">                    <!-- 列1：Fr -->
+            <span class="atomic-num">87</span>
+            <span class="symbol">Fr</span>
+            <span class="name">钫</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列2：Ra -->
+            <span class="atomic-num">88</span>
+            <span class="symbol">Ra</span>
+            <span class="name">镭</span>
+        </div>
+        <div class="grid-cell placeholder-cell">                <!-- 列3：锕系占位 -->
+            <span>89-103</span>
+            <span>锕系</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列4：Rf -->
+            <span class="atomic-num">104</span>
+            <span class="symbol">Rf</span>
+            <span class="name">𬬻</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列5：Db -->
+            <span class="atomic-num">105</span>
+            <span class="symbol">Db</span>
+            <span class="name">𬭊</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列6：Sg -->
+            <span class="atomic-num">106</span>
+            <span class="symbol">Sg</span>
+            <span class="name">𬭳</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列7：Bh -->
+            <span class="atomic-num">107</span>
+            <span class="symbol">Bh</span>
+            <span class="name">𬭛</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列8：Hs -->
+            <span class="atomic-num">108</span>
+            <span class="symbol">Hs</span>
+            <span class="name">𬭶</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列9：Mt -->
+            <span class="atomic-num">109</span>
+            <span class="symbol">Mt</span>
+            <span class="name">鿏</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列10：Ds -->
+            <span class="atomic-num">110</span>
+            <span class="symbol">Ds</span>
+            <span class="name">𫟼</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列11：Rg -->
+            <span class="atomic-num">111</span>
+            <span class="symbol">Rg</span>
+            <span class="name">𬬭</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列12：Cn -->
+            <span class="atomic-num">112</span>
+            <span class="symbol">Cn</span>
+            <span class="name">鿔</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列13：Nh -->
+            <span class="atomic-num">113</span>
+            <span class="symbol">Nh</span>
+            <span class="name">鿭</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列14：Fl -->
+            <span class="atomic-num">114</span>
+            <span class="symbol">Fl</span>
+            <span class="name">𫓧</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列15：Mc -->
+            <span class="atomic-num">115</span>
+            <span class="symbol">Mc</span>
+            <span class="name">镆</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列16：Lv -->
+            <span class="atomic-num">116</span>
+            <span class="symbol">Lv</span>
+            <span class="name">𫟷</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列17：Ts -->
+            <span class="atomic-num">117</span>
+            <span class="symbol">Ts</span>
+            <span class="name">鿬</span>
+        </div>
+        <div class="grid-cell element-cell">                    <!-- 列18：Og -->
+            <span class="atomic-num">118</span>
+            <span class="symbol">Og</span>
+            <span class="name">鿫</span>
+        </div>
+
+        <!-- 行8：预留空行（可放镧系/锕系，也可留空） -->
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+        <div class="grid-cell empty-cell"></div>
+    </div>
+
+    <!-- 镧系元素（1×16网格，和主网格等宽） -->
+    <div class="lan-act-title">镧系元素 (57-71)</div>
+    <div class="lan-act-grid">
+        <div class="grid-cell header-cell">原子序数</div>
+        <div class="grid-cell">57</div>
+        <div class="grid-cell">58</div>
+        <div class="grid-cell">59</div>
+        <div class="grid-cell">60</div>
+        <div class="grid-cell">61</div>
+        <div class="grid-cell">62</div>
+        <div class="grid-cell">63</div>
+        <div class="grid-cell">64</div>
+        <div class="grid-cell">65</div>
+        <div class="grid-cell">66</div>
+        <div class="grid-cell">67</div>
+        <div class="grid-cell">68</div>
+        <div class="grid-cell">69</div>
+        <div class="grid-cell">70</div>
+        <div class="grid-cell">71</div>
+    </div>
+    <div class="lan-act-grid">
+        <div class="grid-cell header-cell">元素符号</div>
+        <div class="grid-cell element-cell">La</div>
+        <div class="grid-cell element-cell">Ce</div>
+        <div class="grid-cell element-cell">Pr</div>
+        <div class="grid-cell element-cell">Nd</div>
+        <div class="grid-cell element-cell">Pm</div>
+        <div class="grid-cell element-cell">Sm</div>
+        <div class="grid-cell element-cell">Eu</div>
+        <div class="grid-cell element-cell">Gd</div>
+        <div class="grid-cell element-cell">Tb</div>
+        <div class="grid-cell element-cell">Dy</div>
+        <div class="grid-cell element-cell">Ho</div>
+        <div class="grid-cell element-cell">Er</div>
+        <div class="grid-cell element-cell">Tm</div>
+        <div class="grid-cell element-cell">Yb</div>
+        <div class="grid-cell element-cell">Lu</div>
+    </div>
+
+    <!-- 锕系元素（1×16网格） -->
+    <div class="lan-act-title">锕系元素 (89-103)</div>
+    <div class="lan-act-grid">
+        <div class="grid-cell header-cell">原子序数</div>
+        <div class="grid-cell">89</div>
+        <div class="grid-cell">90</div>
+        <div class="grid-cell">91</div>
+        <div class="grid-cell">92</div>
+        <div class="grid-cell">93</div>
+        <div class="grid-cell">94</div>
+        <div class="grid-cell">95</div>
+        <div class="grid-cell">96</div>
+        <div class="grid-cell">97</div>
+        <div class="grid-cell">98</div>
+        <div class="grid-cell">99</div>
+        <div class="grid-cell">100</div>
+        <div class="grid-cell">101</div>
+        <div class="grid-cell">102</div>
+        <div class="grid-cell">103</div>
+    </div>
+    <div class="lan-act-grid">
+        <div class="grid-cell header-cell">元素符号</div>
+        <div class="grid-cell element-cell">Ac</div>
+        <div class="grid-cell element-cell">Th</div>
+        <div class="grid-cell element-cell">Pa</div>
+        <div class="grid-cell element-cell">U</div>
+        <div class="grid-cell element-cell">Np</div>
+        <div class="grid-cell element-cell">Pu</div>
+        <div class="grid-cell element-cell">Am</div>
+        <div class="grid-cell element-cell">Cm</div>
+        <div class="grid-cell element-cell">Bk</div>
+        <div class="grid-cell element-cell">Cf</div>
+        <div class="grid-cell element-cell">Es</div>
+        <div class="grid-cell element-cell">Fm</div>
+        <div class="grid-cell element-cell">Md</div>
+        <div class="grid-cell element-cell">No</div>
+        <div class="grid-cell element-cell">Lr</div>
+    </div>
+</body>
+</html>

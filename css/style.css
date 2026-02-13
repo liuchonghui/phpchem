@@ -1,0 +1,1030 @@
+/* 全局样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* 化学可视化区域 - 层级1 */
+.chem-visualization {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #e8f4f8;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.visualization-content {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+/* 化学方程式配平可视化 */
+.chemical-equations-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.chemical-equation-item {
+    background: white;
+    border: 2px solid #4a90a4;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.chemical-equation-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    border-color: #2c5f7a;
+}
+
+.chemical-equation-item .equation {
+    font-family: monospace;
+    font-size: 14px;
+    color: #2c5f7a;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.chemical-equation-item .explanation {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.3;
+}
+
+/* 元素周期表可视化 */
+.element-periodic-table {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 60px 10px 10px 10px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    overflow-x: auto;
+    max-width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    position: relative;
+    z-index: 2;
+}
+
+.period-row {
+    display: grid;
+    grid-template-columns: repeat(18, 1fr);
+    gap: 2px;
+}
+
+.element-cell {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 3px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 10px;
+    min-height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 35px;
+    position: relative;
+}
+
+.element-cell.empty {
+    background: transparent;
+    border: none;
+    cursor: default;
+    min-height: 50px;
+}
+
+.element-cell:hover:not(.empty) {
+    background: #4a90a4;
+    color: white;
+    transform: scale(1.15);
+    z-index: 10;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.element-cell .symbol {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 2px;
+}
+
+.element-cell .number {
+    font-size: 8px;
+    opacity: 0.7;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+}
+
+.element-cell .mass {
+    font-size: 8px;
+    opacity: 0.7;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+}
+
+/* 镧系元素特殊样式 */
+.element-cell.lanthanide {
+    background: #e8f4f8;
+    border-color: #4a90a4;
+}
+
+/* 锕系元素特殊样式 */
+.element-cell.actinide {
+    background: #f0e8f8;
+    border-color: #8a4a90;
+}
+
+/* 稀有气体特殊样式 */
+.element-cell[data-symbol="He"],
+.element-cell[data-symbol="Ne"],
+.element-cell[data-symbol="Ar"],
+.element-cell[data-symbol="Kr"],
+.element-cell[data-symbol="Xe"],
+.element-cell[data-symbol="Rn"] {
+    background: #f0f8ff;
+    border-color: #6495ed;
+}
+
+/* 碱金属特殊样式 */
+.element-cell[data-symbol="Li"],
+.element-cell[data-symbol="Na"],
+.element-cell[data-symbol="K"],
+.element-cell[data-symbol="Rb"],
+.element-cell[data-symbol="Cs"],
+.element-cell[data-symbol="Fr"] {
+    background: #fff0f0;
+    border-color: #ff6b6b;
+}
+
+/* 碱土金属特殊样式 */
+.element-cell[data-symbol="Be"],
+.element-cell[data-symbol="Mg"],
+.element-cell[data-symbol="Ca"],
+.element-cell[data-symbol="Sr"],
+.element-cell[data-symbol="Ba"],
+.element-cell[data-symbol="Ra"] {
+    background: #f0fff0;
+    border-color: #51cf66;
+}
+
+/* 卤素特殊样式 */
+.element-cell[data-symbol="F"],
+.element-cell[data-symbol="Cl"],
+.element-cell[data-symbol="Br"],
+.element-cell[data-symbol="I"],
+.element-cell[data-symbol="At"] {
+    background: #fff8f0;
+    border-color: #ffa94d;
+}
+
+/* 镧系和锕系元素行样式 */
+.lanthanide-row,
+.actinide-row {
+    margin-top: 5px;
+}
+
+/* V2.3 元素周期表样式 */
+.element-periodic-table-v2 {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 60px 10px 10px 10px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    overflow-x: auto;
+    max-width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    position: relative;
+    z-index: 2;
+}
+
+/* V2.4 元素周期表样式 - 9×19网格版 */
+.element-periodic-table-v3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: #f8f8f8;
+    max-width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+/* 核心9×19网格 */
+.periodic-grid {
+    display: grid;
+    grid-template-columns: repeat(19, 60px);
+    grid-template-rows: repeat(9, 70px);
+    gap: 1px;
+    background: #ccc;
+    margin-bottom: 20px;
+}
+
+/* 网格单元格通用样式 */
+.grid-cell {
+    background: #fff;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 11px;
+}
+
+/* 表头单元格 */
+.header-cell {
+    background: #333;
+    color: white;
+    font-weight: bold;
+    font-size: 10px;
+}
+
+/* 周期列单元格（第一列） */
+.period-cell {
+    background: #444;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* 元素单元格 */
+.element-cell {
+    background: #f0f8ff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.element-cell:hover {
+    background: #4a90a4;
+    color: white;
+    transform: scale(1.1);
+    z-index: 10;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* 镧系/锕系占位单元格 */
+.placeholder-cell {
+    background: #e0e0e0;
+    color: #666;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.placeholder-cell:hover {
+    background: #4a90a4;
+    color: white;
+    transform: scale(1.1);
+    z-index: 10;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* 空单元格 */
+.empty-cell {
+    background: #f5f5f5;
+}
+
+/* 元素信息样式 */
+.atomic-num {
+    font-size: 9px;
+    color: #666;
+    align-self: flex-start;
+}
+
+.symbol {
+    font-size: 16px;
+    font-weight: bold;
+    color: #222;
+    margin: 2px 0;
+}
+
+.name {
+    font-size: 9px;
+    color: #444;
+}
+
+/* 镧系锕系单独展示（1×16网格） */
+.lan-act-grid {
+    display: grid;
+    grid-template-columns: 60px repeat(15, 60px);
+    grid-template-rows: 70px;
+    gap: 1px;
+    background: #ccc;
+    margin: 10px 0;
+    width: calc(19*60px + 18*1px);
+}
+
+.lan-act-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #333;
+}
+
+/* 镧系/锕系占位符样式 */
+.element-cell.lanthanide-placeholder {
+    background: #e8f4f8;
+    border-color: #4a90a4;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.element-cell.actinide-placeholder {
+    background: #f0e8f8;
+    border-color: #8a4a90;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.element-cell.lanthanide-placeholder:hover,
+.element-cell.actinide-placeholder:hover {
+    transform: scale(1.15);
+    z-index: 10;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.element-cell.lanthanide-placeholder .description,
+.element-cell.actinide-placeholder .description {
+    font-size: 8px;
+    opacity: 0.8;
+    margin-top: 2px;
+}
+
+/* 镧系元素特殊样式 */
+.element-cell.lanthanide {
+    background: #e8f4f8;
+    border-color: #4a90a4;
+}
+
+/* 锕系元素特殊样式 */
+.element-cell.actinide {
+    background: #f0e8f8;
+    border-color: #8a4a90;
+}
+
+/* 摩尔质量计算可视化 */
+.molecular-weight-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.molecule-card {
+    background: white;
+    border: 2px solid #4a90a4;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.molecule-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.molecule-card .formula {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c5f7a;
+    margin-bottom: 6px;
+}
+
+.molecule-card .weight {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+/* 摩尔质量计算可视化 */
+.molar-mass-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.molar-mass-card {
+    background: white;
+    border: 2px solid #4a90a4;
+    border-radius: 8px;
+    padding: 20px;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.molar-mass-card .formula {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2c5f7a;
+    margin-bottom: 10px;
+}
+
+.molar-mass-card .mass-value {
+    font-size: 32px;
+    color: #4a90a4;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.molar-mass-card .unit {
+    font-size: 18px;
+    color: #666;
+}
+
+/* 化学反应计算可视化 */
+.reaction-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.reaction-card {
+    background: white;
+    border: 2px solid #4a90a4;
+    border-radius: 8px;
+    padding: 15px;
+    width: 90%;
+    max-width: 600px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.reaction-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.reaction-card .equation {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2c5f7a;
+    text-align: center;
+    margin-bottom: 10px;
+    font-family: monospace;
+}
+
+.reaction-card .details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.reaction-card .detail-item {
+    background: #f8f9fa;
+    padding: 8px;
+    border-radius: 4px;
+    border-left: 3px solid #4a90a4;
+}
+
+.reaction-card .detail-label {
+    font-weight: bold;
+    color: #2c5f7a;
+    font-size: 11px;
+}
+
+.reaction-card .detail-value {
+    color: #666;
+    margin-top: 3px;
+    font-size: 11px;
+}
+
+/* 元素详情弹窗 */
+.element-detail-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 3px solid #4a90a4;
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 200;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: none;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.element-detail-popup.visible {
+    display: block;
+}
+
+.element-detail-popup .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #4a90a4;
+}
+
+.element-detail-popup .popup-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c5f7a;
+}
+
+.element-detail-popup .popup-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.element-detail-popup .popup-content {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.element-detail-popup .popup-content div {
+    margin-bottom: 6px;
+}
+
+.element-detail-popup .popup-content .label {
+    font-weight: bold;
+    color: #4a90a4;
+}
+
+/* 方程式详情弹窗 */
+.equation-detail-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 3px solid #4a90a4;
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 200;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: none;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.equation-detail-popup.visible {
+    display: block;
+}
+
+.equation-detail-popup .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #4a90a4;
+}
+
+.equation-detail-popup .popup-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2c5f7a;
+}
+
+.equation-detail-popup .popup-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.equation-detail-popup .popup-content {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.equation-detail-popup .popup-content .equation {
+    font-family: monospace;
+    font-size: 15px;
+    font-weight: bold;
+    color: #2c5f7a;
+    margin-bottom: 10px;
+}
+
+.equation-detail-popup .popup-content .explanation {
+    margin-bottom: 10px;
+}
+
+.equation-detail-popup .popup-content .steps {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.equation-detail-popup .popup-content .step {
+    margin-bottom: 5px;
+}
+
+/* 分子详情弹窗 */
+.molecule-detail-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 3px solid #4a90a4;
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 200;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: none;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.molecule-detail-popup.visible {
+    display: block;
+}
+
+.molecule-detail-popup .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #4a90a4;
+}
+
+.molecule-detail-popup .popup-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2c5f7a;
+}
+
+.molecule-detail-popup .popup-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.molecule-detail-popup .popup-content {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.molecule-detail-popup .popup-content .formula {
+    font-size: 22px;
+    font-weight: bold;
+    color: #2c5f7a;
+    margin-bottom: 10px;
+}
+
+.molecule-detail-popup .popup-content .weight {
+    font-size: 16px;
+    color: #4a90a4;
+    margin-bottom: 10px;
+}
+
+.molecule-detail-popup .popup-content .composition {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.molecule-detail-popup .popup-content .composition-item {
+    margin-bottom: 5px;
+}
+
+/* 化学结构可视化区域 */
+.chem-diagram {
+    width: 80%;
+    height: 80%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #4a90a4;
+}
+
+.diagram-placeholder {
+    color: #4a90a4;
+    font-size: 18px;
+    text-align: center;
+    padding: 20px;
+}
+
+/* 遮罩层 */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 150;
+    display: none;
+}
+
+.overlay.visible {
+    display: block;
+}
+
+/* 左侧抽屉样式 - 层级100（最高） */
+.drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 320px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    z-index: 100;
+    transition: transform 0.3s ease;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* 抽屉收起状态 */
+.drawer.hidden {
+    transform: translateX(-100%);
+}
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #4a90a4;
+}
+
+.drawer-header h3 {
+    color: #2c5f7a;
+    font-size: 18px;
+}
+
+.toggle-btn {
+    background-color: #4a90a4;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.toggle-btn:hover {
+    background-color: #3a7a8a;
+}
+
+.drawer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.calc-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.calc-group label {
+    font-weight: bold;
+    color: #2c5f7a;
+    font-size: 14px;
+}
+
+.calc-group select,
+.calc-group input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.calc-group input:focus,
+.calc-group select:focus {
+    outline: none;
+    border-color: #4a90a4;
+}
+
+#calculateBtn {
+    background-color: #4a90a4;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+#calculateBtn:hover {
+    background-color: #3a7a8a;
+}
+
+.result-display {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.result-display h4 {
+    color: #2c5f7a;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+#resultContent {
+    color: #333;
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.tips {
+    background-color: #e8f4f8;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #2c5f7a;
+    line-height: 1.4;
+}
+
+/* 化学说明卡片 - 层级99（低于抽屉） */
+.chem-info-card {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    z-index: 99;
+    border: 2px solid #4a90a4;
+    display: none;
+}
+
+.chem-info-card.visible {
+    display: block;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #4a90a4;
+    color: white;
+    border-radius: 6px 6px 0 0;
+}
+
+.card-header span {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.close-card-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-card-btn:hover {
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 4px;
+}
+
+.card-content {
+    padding: 15px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #333;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* 缩放按钮组：固定在右下角 - 层级98（低于卡片/抽屉） */
+.zoom-btn-group {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 98;
+}
+
+.zoom-btn {
+    background-color: #4a90a4;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.zoom-btn:hover {
+    background-color: #3a7a8a;
+}
+
+/* 抽屉展开按钮：固定在左上角 - 层级101（高于抽屉） */
+.drawer-toggle-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #4a90a4;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 101;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.drawer-toggle-btn:hover {
+    background-color: #3a7a8a;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .drawer {
+        width: 100%;
+        max-width: 320px;
+    }
+    
+    .chem-info-card {
+        width: 90%;
+        right: 5%;
+        left: 5%;
+    }
+    
+    .chem-diagram {
+        width: 95%;
+        height: 70%;
+    }
+    
+    .zoom-btn-group {
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    .drawer-toggle-btn {
+        top: 10px;
+        left: 10px;
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+}
